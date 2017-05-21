@@ -10,7 +10,7 @@ import org.http4s.server.{Server, ServerApp}
 import org.http4s.server.blaze.BlazeBuilder
 
 
-object BlazeExample extends ServerApp {
+object PickupSchedulerService extends ServerApp {
 
   val port : Int              = envOrNone("HTTP_PORT") map (_.toInt) getOrElse 8080
   val ip   : String           = "0.0.0.0"
@@ -19,7 +19,7 @@ object BlazeExample extends ServerApp {
   override def server(args: List[String]): Task[Server] =
     BlazeBuilder
       .bindHttp(port, ip)
-      .mountService(HelloWorld.service)
+      .mountService(PickupSchedulerApi.service)
       .withServiceExecutor(pool)
       .start
 }

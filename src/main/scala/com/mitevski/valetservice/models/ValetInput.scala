@@ -1,6 +1,7 @@
 package com.mitevski.valetservice.models
 
 import org.joda.time.DateTime
+import io.circe.generic.auto._
 
 sealed trait ValetInput
 
