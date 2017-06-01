@@ -4,21 +4,22 @@ import com.mitevski.valetservice.models.{Pickup, ScheduledPickup, Valet}
 import org.joda.time.{DateTime, Interval}
 
 import scala.util.{Failure, Success, Try}
+import scalaz.concurrent.Task
 
 
 object PickupScheduler {
 
   var id = 0
 
-  def scheduleValet(valets: List[Valet], scheduledPickups: List[ScheduledPickup], requestedPickup: Pickup): Try[ScheduledPickup] = {
+  def scheduleValet(valets: List[Valet], scheduledPickups: List[ScheduledPickup], requestedPickup: Pickup): Task[ScheduledPickup] = {
     val occuppied = findOccupiedValets(scheduledPickups, requestedPickup.time)
     val available = valets.filter( valet => !occuppied.contains(valet))
-    if (available.isEmpty) Failure(new Exception("no valet available"))
+    if (available.isEmpty) Task(throw new Exception("no valet available"))
     else {
       // choose valet with min(pickups)
       val valet = valetWithMinPickups(valets, scheduledPickups)
       id += 1
-      Success(ScheduledPickup(id.toString, valet, requestedPickup))
+      Task(ScheduledPickup(id.toString, valet, requestedPickup))
     }
   }
 

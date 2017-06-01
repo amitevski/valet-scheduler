@@ -4,17 +4,18 @@ import com.mitevski.valetservice.models.{ScheduledPickup, Valet}
 
 import scala.collection.mutable
 import scala.util.{Success, Try}
+import scalaz.concurrent.Task
 
 
 object ScheduledPickupDb {
 
   var scheduledPickupsMock = new mutable.MutableList[ScheduledPickup]
 
-  def scheduledPickups: Try[List[ScheduledPickup]] = Success(scheduledPickupsMock.toList)
+  def scheduledPickups: Task[List[ScheduledPickup]] = Task(scheduledPickupsMock.toList)
 
-  def saveScheduledPickup(scheduledPickup: ScheduledPickup): Try[Boolean] = {
+  def saveScheduledPickup(scheduledPickup: ScheduledPickup): Task[Boolean] = {
     scheduledPickupsMock += scheduledPickup
-    Success(true)
+    Task(true)
   }
 
 }
